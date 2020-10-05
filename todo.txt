@@ -1,4 +1,4 @@
 validate that user insert different symbols
 generate 4-digit random number with all different digits (done)
-computer number guesser
+computer number guesser (done)
 generate all sets of digits (done)

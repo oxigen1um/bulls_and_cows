@@ -34,25 +34,47 @@ void invitation() {
   Cow - Guessed only right digit, but not position)" << "\n\n";
 }
 
+// Collect chars from input stream for further validations
+std::vector<char> collect_user_input() {
+  char tmp;
+  std::vector<char> input_data;
+  
+  std::cin >> std::noskipws;
+  
+  while (true) {
+    std::cin >> tmp;
+    
+    if (tmp == '\n') break;
+    input_data.push_back(tmp);
+    
+    if (!std::cin) throw std::runtime_error("Input stream error!");
+    
+  }
+  
+  std::cin >> std::skipws;
+  return input_data;
+}
+
 char select_guesser() {
   std::cout << "Who will guess now? (press 'c' for computer and 'm' for me)\n";
-  char guesser;
   
-  std::cin >> guesser;
-  switch(guesser) {
-    case 'c':
-      // std::cout << "Computer will guess the number!\n\n";
-      return 'c';
+  std::vector<char> user_input = collect_user_input();
   
-    case 'm':
-      // std::cout << "Human will guess the number!\n\n";
-      return 'm';
-      
-    default:
-      std::cerr << "Please, type in valid symbols :)\n\n";
-      std::cin.clear();
-      std::cin.ignore ( 100 , '\n' );
-      return select_guesser();
+  if (user_input.size() == 1) {
+    switch(user_input[0]) {
+      case 'c':
+        return 'c';
+    
+      case 'm':
+        return 'm';
+        
+      default:
+        std::cerr << "Please, type in valid symbol :)\n\n";
+        return select_guesser();
+    }
+  } else {
+    std::cerr << "Insert only 1 valid symbol!\n\n";
+    return select_guesser();
   }
 }
 
@@ -90,8 +112,6 @@ std::vector<std::vector<char> > generate_all_sets(std::vector<char> alphabet) {
   return possible_sets;
 }
 
-std::vector<std::vector<char> > lol = generate_all_sets(alphabet);
-
 std::vector<char> generate_quiz(int quiz_size, std::vector<char> alphabet) {
   
   if (quiz_size > alphabet.size()) {
@@ -123,21 +143,13 @@ std::vector<char> collect_user_guess() {
     
     std::cout << "Guess the number: " << "\n" << ">";
     
-    std::vector<char> user_input = {};
+    std::vector<char> user_input = collect_user_input();
     
-    for (int i = 0; i < 4; ++i) {
-      if (std::cin) {
-        char value;
-        std::cin >> value;
-        user_input.push_back(value);
-      }
+    // validate input vector size
+    if (user_input.size() != 4) {
+      std::cerr << "Allert! Insert 4-digit sequence!\n\n";
+      return collect_user_guess();
     }
-    
-    // validate input vector size before returning user guess
-    // if (user_input.size() != 4) {
-    //   std::cerr << "Insert exactly 4-digit sequence!\n";
-    //   return collect_user_guess();
-    // }
     
     // all digits must be distinct
     for (int i = 0; i < 4; ++i) {
@@ -277,7 +289,7 @@ int machine_guesser() {
   
   Game game_state;
   
-  std::cout << "Hope you have picked a number\n\n";
+  std::cout << "Hope, you have picked a number\n\n";
   
   // sieve filtering
   std::vector<std::vector<char> > sieve = generate_all_sets(alphabet);
