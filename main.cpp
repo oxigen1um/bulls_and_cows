@@ -131,7 +131,7 @@ std::vector<char> generate_quiz(int quiz_size, std::vector<char> alphabet) {
     alphabet.erase(alphabet.begin() + index);
     
   }
-  
+  // print current quiz (hint for testing)
   for (int i = 0; i < current_quiz.size(); ++i) {
     std::cout << current_quiz[i];
   }
@@ -147,7 +147,7 @@ std::vector<char> collect_user_guess() {
     
     // validate input vector size
     if (user_input.size() != 4) {
-      std::cerr << "Allert! Insert 4-digit sequence!\n\n";
+      std::cerr << "Alert! Insert 4-digit sequence!\n\n";
       return collect_user_guess();
     }
     
@@ -223,26 +223,37 @@ int human_guesser() {
 
 // collect user feedback
 
-// class Feedback {
-//   public:
-//     std::vector<char> initial_prediction = {};
-//     int bulls = 0;
-//     int cows = 0;
+// int validate_user_feedback(std::vector<char> feedback) {
+//   if (feedback.size() == 1) {
+// 
+//     return feedback[0];
+// 
+//   } else {
+//     std::cerr << "Insert valid value!\n\n";
+//     std::cin.clear();
+//     return validate_user_feedback(feedback);
+//   }
 // }
 
 Game collect_user_feedback(std::vector<char> initial_prediction) {
   
   Game feedback;
   
-  std::cout << "Here my prediction: ";
+  std::cout << "Here is my prediction: ";
   for (char x : initial_prediction) {
     std::cout << x;
   }
   
   std::cout << "\nHow many bulls?\n";
+  // std::vector<char> raw_bulls = collect_user_input();
+  // feedback.bulls = validate_user_feedback(raw_bulls);
+  
   std::cin >> feedback.bulls;
   
   std::cout << "How many cows?\n";
+  // std::vector<char> raw_cows = collect_user_input();
+  // feedback.cows = validate_user_feedback(raw_cows);
+
   std::cin >> feedback.cows;
   
   return feedback;
@@ -305,7 +316,7 @@ int machine_guesser() {
     std::cout << x;
   }
   std::cout << std::endl;
-  
+  std::cin.ignore(100, '\n'); // delete 100 symbols from buffer until \n met 
   return init_game(select_guesser());
 }
 
